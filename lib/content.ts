@@ -241,7 +241,7 @@ export const footerLinks = {
   company: [
     { label: "About", href: "/#top" },
     { label: "Partner Program", href: "/#showcase" },
-    { label: "Contact", href: "/#top" },
+    { label: "Contact", href: "/contact" },
   ],
   legal: [
     { label: "Privacy", href: "#" },
