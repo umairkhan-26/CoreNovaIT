@@ -1,46 +1,52 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
-import "./globals.css";
-import { CursorProvider } from "@/lib/cursor-context";
-import CursorGlow from "@/components/CursorGlow";
+import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import Header from "@/components/Header";
+import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
-import { siteConfig } from "@/lib/content";
+import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["500", "600", "700"],
   variable: "--font-display",
+  display: "swap",
 });
 
-const inter = Inter({
+const body = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-body",
+  variable: "--font-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.tagline}`,
-  description: siteConfig.description,
+  title: {
+    default: "CoreNovaIT — Build. Design. Grow. Automate.",
+    template: "%s — CoreNovaIT",
+  },
+  description:
+    "CoreNovaIT is a white-label web, app, design, and AI-integration partner for agencies that don't build in-house.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        suppressHydrationWarning
-        className={`${spaceGrotesk.variable} ${inter.variable} bg-bg-base font-body text-text-primary`}
-      >
-        <CursorProvider>
-          <CursorGlow />
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </CursorProvider>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <body>
+        <Header />
+        <Marquee />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/content";
 import ContactForm from "@/components/ContactForm";
-import SectionHeading from "@/components/SectionHeading";
 
-export const metadata: Metadata = {
-  title: `Contact — ${siteConfig.name}`,
-  description: "Tell us what you're building and we'll follow up with a scoped proposal.",
-};
+export const metadata: Metadata = { title: "Start a Project" };
 
 export default function ContactPage() {
   return (
-    <section className="relative py-32 md:py-40">
-      <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-12 px-6 md:grid-cols-2 md:items-start">
-        <SectionHeading
-          eyebrow="Contact"
-          title="Let's build something together."
-          description="Tell us what you're building — we'll follow up with a scoped proposal, not a sales pitch."
-        />
-        <ContactForm />
+    <section className="sec">
+      <div className="wrap">
+        <div className="eyebrow page-eyebrow">Start a project</div>
+        <h1 className="page-h1">Tell us what you&apos;re building.</h1>
+        <p className="page-intro">
+          Send the details below — we&apos;ll route it to the right person
+          and follow up as soon as we can.
+        </p>
+
+        <div style={{ marginTop: 40 }}>
+          <ContactForm />
+        </div>
       </div>
     </section>
   );

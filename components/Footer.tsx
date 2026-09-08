@@ -1,78 +1,86 @@
-import { footerLinks, siteConfig } from "@/lib/content";
-import Logo from "./Logo";
+import Link from "next/link";
 
-const socials = [
-  { label: "X", href: "#" },
-  { label: "GitHub", href: "#" },
-  { label: "Discord", href: "#" },
-];
+const CONTACT_EMAIL = "umairkhan62661@gmail.com";
 
-export default function Footer() {
+function NovaMark({ size = 24 }: { size?: number }) {
   return (
-    <footer className="relative border-t border-white/10 py-16">
-      <div className="mx-auto max-w-[1280px] px-6">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
-          <div className="col-span-2">
-            <Logo />
-            <p className="mt-3 max-w-xs text-sm text-text-secondary">
-              {siteConfig.description}
-            </p>
-            <div className="mt-6 flex gap-4">
-              {socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="glass flex h-9 w-9 items-center justify-center rounded-full text-xs text-text-secondary transition-colors hover:text-text-primary"
-                >
-                  {social.label[0]}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <FooterColumn title="Services" links={footerLinks.services} />
-          <FooterColumn title="Company" links={footerLinks.company} />
-          <FooterColumn title="Legal" links={footerLinks.legal} />
-        </div>
-
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-text-secondary md:flex-row md:items-center md:justify-between">
-          <span>
-            © {new Date().getFullYear()} {siteConfig.name}. All rights
-            reserved.
-          </span>
-          <span>
-            Trusted by agencies to build, design, and grow client projects
-            end-to-end.
-          </span>
-        </div>
-      </div>
-    </footer>
+    <svg
+      className="mark"
+      width={size}
+      height={size}
+      viewBox="0 0 26 26"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="13" cy="13" r="2.4" fill="var(--accent)" />
+      <path
+        d="M13 1v6M13 19v6M1 13h6M19 13h6M4.5 4.5l4.2 4.2M17.3 17.3l4.2 4.2M21.5 4.5l-4.2 4.2M8.7 17.3l-4.2 4.2"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; href: string }[];
-}) {
+export default function Footer() {
   return (
-    <div>
-      <h4 className="text-sm font-semibold text-text-primary">{title}</h4>
-      <ul className="mt-4 flex flex-col gap-3">
-        {links.map((link) => (
-          <li key={link.label}>
-            <a
-              href={link.href}
-              className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <footer>
+      <div className="wrap">
+        <div className="foot-top">
+          <div className="foot-brand">
+            <Link className="brand" href="/">
+              <NovaMark />
+              <span>CoreNovaIT</span>
+            </Link>
+            <p>
+              Build. Design. Grow. Automate. A white-label development,
+              design, and AI-integration partner for agencies that don&apos;t
+              build in-house.
+            </p>
+          </div>
+
+          <div className="foot-col">
+            <h4>Services</h4>
+            <ul>
+              <li><Link href="/services">Web Development</Link></li>
+              <li><Link href="/services">App Development</Link></li>
+              <li><Link href="/services">Graphic Design</Link></li>
+              <li><Link href="/services">Motion Graphics</Link></li>
+              <li><Link href="/services">Digital Marketing</Link></li>
+              <li><Link href="/services">Social Media</Link></li>
+              <li><Link href="/ai">AI Integrations</Link></li>
+            </ul>
+          </div>
+
+          <div className="foot-col">
+            <h4>Platforms</h4>
+            <ul>
+              <li><Link href="/platforms">Shopify</Link></li>
+              <li><Link href="/platforms">Wix</Link></li>
+              <li><Link href="/platforms">Squarespace</Link></li>
+              <li><Link href="/platforms">WordPress</Link></li>
+              <li><Link href="/platforms">WooCommerce</Link></li>
+              <li><Link href="/platforms">Custom Development</Link></li>
+            </ul>
+          </div>
+
+          <div className="foot-col">
+            <h4>Company</h4>
+            <ul>
+              <li><Link href="/process">Process</Link></li>
+              <li><Link href="/partners">For Partners</Link></li>
+              <li><Link href="/faq">FAQ</Link></li>
+              <li><Link href="/contact">Start a Project</Link></li>
+              <li><a href={`mailto:${CONTACT_EMAIL}`}>Email Us</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="foot-bottom">
+          <span>© {new Date().getFullYear()} CoreNovaIT — built white-label, always.</span>
+          <span>Partner rates, NDA, and escalation paths available on request.</span>
+        </div>
+      </div>
+    </footer>
   );
 }

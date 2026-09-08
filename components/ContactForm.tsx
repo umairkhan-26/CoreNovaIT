@@ -1,112 +1,154 @@
 "use client";
 
-import { useState } from "react";
-import MagneticButton from "./MagneticButton";
+import { useState, type FormEvent } from "react";
 
-type Status = "idle" | "submitting" | "success" | "error";
+const TO = "umairkhan62661@gmail.com";
 
+const SERVICES = [
+  "Web Development",
+  "App Development",
+  "Graphic Design",
+  "Motion Graphics",
+  "Digital Marketing",
+  "Social Media",
+  "AI Integrations",
+  "Not sure yet",
+];
+
+/**
+ * There is no backend here — CoreNovaIT's site doesn't run a server that
+ * can receive form submissions, so "Send" builds a mailto: link from the
+ * fields and opens the visitor's email client with everything pre-filled.
+ *
+ * If you later add a real backend (an API route, Formspree, etc.), swap
+ * handleSubmit's mailto redirect for a fetch() POST — the form/state
+ * below doesn't need to change.
+ */
 export default function ContactForm() {
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<Status>("idle");
-  const [feedback, setFeedback] = useState("");
+  const [service, setService] = useState(SERVICES[0]);
+  const [details, setDetails] = useState("");
+  const [status, setStatus] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function buildMailto() {
+    const subject = `New project inquiry — ${service}${name ? ` (${name})` : ""}`;
+    const body = [
+      `Name: ${name}`,
+      `Agency/Company: ${company || "—"}`,
+      `Email: ${email}`,
+      `Service needed: ${service}`,
+      "",
+      "Project details:",
+      details,
+    ].join("\n");
+    return `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("submitting");
-    setFeedback("");
-
-    try {
-      const res = await fetch("/api/contact.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
-      });
-
-      const data = await res.json().catch(() => null);
-
-      if (res.ok && data?.success) {
-        setStatus("success");
-        setFeedback(data.message || "Thank you! Your message has been received.");
-        setName("");
-        setEmail("");
-        setMessage("");
-      } else {
-        setStatus("error");
-        setFeedback(data?.message || "Something went wrong. Please try again.");
-      }
-    } catch {
-      setStatus("error");
-      setFeedback("Couldn't reach the server. Please try again later.");
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
+      return;
     }
-  };
+    window.location.href = buildMailto();
+    setStatus(
+      `Opening your email app… if nothing happens, email us directly at ${TO}.`
+    );
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="glass flex flex-col gap-5 rounded-xl2 p-8">
-      <div className="flex flex-col gap-2">
-        <label htmlFor="name" className="text-sm font-medium text-text-primary">
-          Name
-        </label>
-        <input
-          id="name"
-          type="text"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="rounded-lg border border-surface-glass-border bg-white/5 px-4 py-2.5 text-text-primary outline-none transition-colors focus:border-accent-solid"
-          placeholder="Your name"
-        />
-      </div>
+    <div className="form-wrap">
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="field-row">
+          <div className="field">
+            <label htmlFor="cf-name">Name</label>
+            <input
+              id="cf-name"
+              name="name"
+              type="text"
+              required
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="cf-company">Agency / Company</label>
+            <input
+              id="cf-company"
+              name="company"
+              type="text"
+              autoComplete="organization"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+            />
+          </div>
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-sm font-medium text-text-primary">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-surface-glass-border bg-white/5 px-4 py-2.5 text-text-primary outline-none transition-colors focus:border-accent-solid"
-          placeholder="you@company.com"
-        />
-      </div>
+        <div className="field">
+          <label htmlFor="cf-email">Email</label>
+          <input
+            id="cf-email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="message" className="text-sm font-medium text-text-primary">
-          Message
-        </label>
-        <textarea
-          id="message"
-          required
-          rows={5}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="resize-none rounded-lg border border-surface-glass-border bg-white/5 px-4 py-2.5 text-text-primary outline-none transition-colors focus:border-accent-solid"
-          placeholder="Tell us what you're building..."
-        />
-      </div>
+        <div className="field">
+          <label htmlFor="cf-service">What do you need?</label>
+          <select
+            id="cf-service"
+            name="service"
+            value={service}
+            onChange={(e) => setService(e.target.value)}
+          >
+            {SERVICES.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <MagneticButton
-        type="submit"
-        disabled={status === "submitting"}
-        className="accent-border relative mt-2 rounded-full bg-white px-7 py-3 text-sm font-semibold text-bg-base disabled:opacity-60"
-      >
-        {status === "submitting" ? "Sending..." : "Send message"}
-      </MagneticButton>
+        <div className="field">
+          <label htmlFor="cf-details">Project details</label>
+          <textarea
+            id="cf-details"
+            name="details"
+            required
+            placeholder="Platform, timeline, budget range, anything else we should know."
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+          />
+        </div>
 
-      {status === "success" && (
-        <p role="status" className="text-sm text-[#34A853]">
-          {feedback}
-        </p>
-      )}
-      {status === "error" && (
-        <p role="alert" className="text-sm text-[#EA4335]">
-          {feedback}
-        </p>
-      )}
-    </form>
+        <div>
+          <button type="submit" className="btn btn-solid">
+            Send via Email
+          </button>
+          <p className="form-note" style={{ marginTop: 12 }}>
+            Clicking Send opens your email app with these details pre-filled,
+            addressed to CoreNovaIT — nothing is sent from this page directly.
+          </p>
+          {status && <p id="formStatus">{status}</p>}
+        </div>
+      </form>
+
+      <aside className="contact-side">
+        <h3>Prefer to just email us?</h3>
+        <p>Skip the form and write to us directly — same inbox either way.</p>
+        <div className="direct">
+          <a className="mailto" href={`mailto:${TO}`}>
+            {TO}
+          </a>
+        </div>
+      </aside>
+    </div>
   );
 }
