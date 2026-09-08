@@ -15,14 +15,13 @@ const SERVICES = [
   "Not sure yet",
 ];
 
+type Status = "idle" | "submitting" | "success" | "error";
+
 /**
- * There is no backend here — CoreNovaIT's site doesn't run a server that
- * can receive form submissions, so "Send" builds a mailto: link from the
- * fields and opens the visitor's email client with everything pre-filled.
- *
- * If you later add a real backend (an API route, Formspree, etc.), swap
- * handleSubmit's mailto redirect for a fetch() POST — the form/state
- * below doesn't need to change.
+ * Posts to /api/contact.php (backend-php/contact.php), which stores
+ * submissions in MySQL. That endpoint's contract is {name, email, message},
+ * so the company/service/details fields below are folded into a single
+ * formatted `message` string before sending.
  */
 export default function ContactForm() {
   const [name, setName] = useState("");
@@ -30,32 +29,56 @@ export default function ContactForm() {
   const [email, setEmail] = useState("");
   const [service, setService] = useState(SERVICES[0]);
   const [details, setDetails] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [feedback, setFeedback] = useState("");
 
-  function buildMailto() {
-    const subject = `New project inquiry — ${service}${name ? ` (${name})` : ""}`;
-    const body = [
-      `Name: ${name}`,
+  function buildMessage() {
+    return [
       `Agency/Company: ${company || "—"}`,
-      `Email: ${email}`,
       `Service needed: ${service}`,
       "",
       "Project details:",
       details,
     ].join("\n");
-    return `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!e.currentTarget.checkValidity()) {
       e.currentTarget.reportValidity();
       return;
     }
-    window.location.href = buildMailto();
-    setStatus(
-      `Opening your email app… if nothing happens, email us directly at ${TO}.`
-    );
+
+    setStatus("submitting");
+    setFeedback("");
+
+    try {
+      const res = await fetch("/api/contact.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message: buildMessage() }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data?.success) {
+        setStatus("success");
+        setFeedback(data.message || "Thank you! Your message has been received.");
+        setName("");
+        setCompany("");
+        setEmail("");
+        setService(SERVICES[0]);
+        setDetails("");
+      } else {
+        setStatus("error");
+        setFeedback(
+          data?.message || `Something went wrong. Please email us directly at ${TO}.`
+        );
+      }
+    } catch {
+      setStatus("error");
+      setFeedback(`Couldn't reach the server. Please email us directly at ${TO}.`);
+    }
   }
 
   return (
@@ -129,14 +152,15 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-solid">
-            Send via Email
+          <button type="submit" className="btn btn-solid" disabled={status === "submitting"}>
+            {status === "submitting" ? "Sending…" : "Send message"}
           </button>
           <p className="form-note" style={{ marginTop: 12 }}>
-            Clicking Send opens your email app with these details pre-filled,
-            addressed to CoreNovaIT — nothing is sent from this page directly.
+            Sends straight to our team and gets saved to our system — nothing
+            opens your email app.
           </p>
-          {status && <p id="formStatus">{status}</p>}
+          {status === "success" && <p id="formStatus">{feedback}</p>}
+          {status === "error" && <p id="formStatus" className="error">{feedback}</p>}
         </div>
       </form>
 

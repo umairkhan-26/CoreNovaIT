@@ -912,6 +912,9 @@ form {
   font-size: 14px;
   color: var(--accent);
 }
+#formStatus.error {
+  color: #d64545;
+}
 
 /* ---------- footer ---------- */
 footer {

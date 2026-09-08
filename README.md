@@ -22,7 +22,7 @@ components/
   Marquee.tsx        Scrolling services strip
   Footer.tsx          Footer with sitemap + mailto link
   NovaCanvas.tsx    The hero's animated nova/orbit graphic (client component, canvas)
-  ContactForm.tsx  Controlled form that opens a pre-filled mailto: link (client component)
+  ContactForm.tsx  Controlled form that POSTs to /api/contact.php (client component)
 ```
 
 ## Getting started
@@ -48,11 +48,13 @@ Then open http://localhost:3000.
   `globals.css`, with `[data-theme="light"|"dark"]` overrides if you want
   to add a manual theme toggle later (just set that attribute on
   `<html>`).
-- **Contact form**: there's no backend, so submitting builds a
-  `mailto:` link from the form fields and opens the visitor's email
-  client — see the comment at the top of `components/ContactForm.tsx`
-  for how to swap this for a real API route or a service like
-  Formspree/Resend once you have one.
+- **Contact form**: submitting POSTs JSON (`{name, email, message}`) to
+  `/api/contact.php` — the PHP backend in `backend-php/`, deployed
+  alongside the static export by `.github/workflows/deploy.yml` — which
+  saves it to MySQL (see `create_table.sql` for the schema) and returns a
+  success/error message the form displays. The extra company/service/
+  details fields are folded into the `message` string before sending,
+  since the backend's contract only expects those three fields.
 - **Nova canvas animation**: ported 1:1 into `NovaCanvas.tsx` as a
   client component with a `useEffect`/`requestAnimationFrame` loop,
   cleaned up on unmount. Respects `prefers-reduced-motion`.
@@ -64,7 +66,6 @@ Then open http://localhost:3000.
   `app/contact/page.tsx` for CoreNovaIT's real business inbox.
 - Add a real `favicon.ico` / `app/icon.png` under `app/` (Next.js picks
   these up automatically).
-- If you want a stored (not just emailed) leads list, add an API route
-  under `app/api/contact/route.ts` that writes to a database or calls a
-  form service, and point `ContactForm`'s `handleSubmit` at it with
-  `fetch()` instead of the `mailto:` redirect.
+- `backend-php/contact.php` still has placeholder DB credentials and a
+  placeholder `Access-Control-Allow-Origin` — fill those in with your
+  real EasyHost database details and domain before deploying.
