@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/goo
 import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
+import CursorTrail from "@/components/CursorTrail";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -43,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
+        <CursorTrail />
         <Header />
         <Marquee />
         <main>{children}</main>

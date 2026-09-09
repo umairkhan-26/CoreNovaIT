@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const CONTACT_EMAIL = "umairkhan62661@gmail.com";
+const CONTACT_EMAIL = "contact@corenovait.com.au";
 
 function NovaMark({ size = 24 }: { size?: number }) {
   return (

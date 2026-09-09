@@ -44,10 +44,10 @@ Then open http://localhost:3000.
 - **Fonts**: swapped the `<link>`-tag Google Fonts import for
   `next/font/google` (Bricolage Grotesque, IBM Plex Sans, IBM Plex Mono),
   which self-hosts and preloads them — no external request at runtime.
-- **Theme**: still token-based light/dark via `prefers-color-scheme` in
-  `globals.css`, with `[data-theme="light"|"dark"]` overrides if you want
-  to add a manual theme toggle later (just set that attribute on
-  `<html>`).
+- **Theme**: token-based in `globals.css`, dark by default regardless of
+  the visitor's OS preference (that's the brand look). A light palette
+  still exists behind `[data-theme="light"]` on `<html>`, ready for a
+  manual toggle later, but nothing switches to it automatically.
 - **Contact form**: submitting POSTs JSON (`{name, email, message}`) to
   `/api/contact.php` — the PHP backend in `backend-php/`, deployed
   alongside the static export by `.github/workflows/deploy.yml` — which
@@ -61,9 +61,9 @@ Then open http://localhost:3000.
 
 ## Things you'll likely want to change
 
-- Swap the placeholder contact email (`umairkhan62661@gmail.com`) in
-  `components/Footer.tsx`, `components/ContactForm.tsx`, and
-  `app/contact/page.tsx` for CoreNovaIT's real business inbox.
+- Contact email is `contact@corenovait.com.au`, set as `CONTACT_EMAIL` /
+  `TO` constants in `components/Footer.tsx` and
+  `components/ContactForm.tsx`.
 - Add a real `favicon.ico` / `app/icon.png` under `app/` (Next.js picks
   these up automatically).
 - `backend-php/contact.php` still has placeholder DB credentials and a

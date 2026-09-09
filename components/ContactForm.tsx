@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 
-const TO = "umairkhan62661@gmail.com";
+const TO = "contact@corenovait.com.au";
 
 const SERVICES = [
   "Web Development",

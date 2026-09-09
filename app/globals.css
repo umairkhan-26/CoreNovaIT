@@ -2,35 +2,11 @@
    CoreNovaIT — design tokens & global styles
    ============================================================ */
 
+/* Dark is the site's actual default look — it no longer depends on the
+   visitor's OS/browser color-scheme preference. Add data-theme="light"
+   to <html> for the (currently unused) light override below, e.g. from
+   a future manual theme toggle. */
 :root {
-  --void: #f5f1ea;
-  --void-2: #ffffff;
-  --void-3: #ece6d9;
-  --ink: #15171d;
-  --ink-soft: #4a4d57;
-  --steel: #6c7488;
-  --line: #ddd5c4;
-  --accent: #c1531c;
-  --accent-soft: #c1531c1a;
-  --accent-ink: #fff9f4;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --void: #0b0d12;
-    --void-2: #12141b;
-    --void-3: #181b24;
-    --ink: #f2efe8;
-    --ink-soft: #b9bdc9;
-    --steel: #8b93a4;
-    --line: #262a35;
-    --accent: #ff8a44;
-    --accent-soft: #ff8a441f;
-    --accent-ink: #1a0f08;
-  }
-}
-
-:root[data-theme="dark"] {
   --void: #0b0d12;
   --void-2: #12141b;
   --void-3: #181b24;
@@ -41,6 +17,19 @@
   --accent: #ff8a44;
   --accent-soft: #ff8a441f;
   --accent-ink: #1a0f08;
+}
+
+:root[data-theme="light"] {
+  --void: #f5f1ea;
+  --void-2: #ffffff;
+  --void-3: #ece6d9;
+  --ink: #15171d;
+  --ink-soft: #4a4d57;
+  --steel: #6c7488;
+  --line: #ddd5c4;
+  --accent: #c1531c;
+  --accent-soft: #c1531c1a;
+  --accent-ink: #fff9f4;
 }
 
 * {
@@ -624,6 +613,7 @@ header {
   border-top: 1px solid var(--line);
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
 }
 @media (max-width: 760px) {
   .trust-list {
