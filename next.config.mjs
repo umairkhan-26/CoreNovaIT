@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // The deploy workflow builds to ./out and FTPs it as static files —
-  // keep this in sync with .github/workflows/deploy.yml.
-  output: "export",
+  // Hostinger runs this as a live Next.js/Node app (confirmed via its
+  // response headers), not a static export served over FTP — the app
+  // needs a real server anyway now that /api/contact is a live route.
 };
 
 export default nextConfig;

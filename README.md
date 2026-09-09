@@ -22,7 +22,8 @@ components/
   Marquee.tsx        Scrolling services strip
   Footer.tsx          Footer with sitemap + mailto link
   NovaCanvas.tsx    The hero's animated nova/orbit graphic (client component, canvas)
-  ContactForm.tsx  Controlled form that POSTs to /api/contact.php (client component)
+  ContactForm.tsx  Controlled form that POSTs to /api/contact (client component)
+  api/contact/route.ts   Saves submissions to Supabase, emails via Resend
 ```
 
 ## Getting started
@@ -48,13 +49,21 @@ Then open http://localhost:3000.
   the visitor's OS preference (that's the brand look). A light palette
   still exists behind `[data-theme="light"]` on `<html>`, ready for a
   manual toggle later, but nothing switches to it automatically.
-- **Contact form**: submitting POSTs JSON (`{name, email, message}`) to
-  `/api/contact.php` — the PHP backend in `backend-php/`, deployed
-  alongside the static export by `.github/workflows/deploy.yml` — which
-  saves it to MySQL (see `create_table.sql` for the schema) and returns a
-  success/error message the form displays. The extra company/service/
-  details fields are folded into the `message` string before sending,
-  since the backend's contract only expects those three fields.
+- **Contact form**: submitting POSTs JSON (`{name, company, email,
+  service, details}`) to `/api/contact` (`app/api/contact/route.ts`),
+  which saves the row to Supabase (schema in `supabase-schema.sql`) and
+  emails a notification via Resend, returning a success/error message
+  the form displays. Needs `NEXT_PUBLIC_SUPABASE_URL`,
+  `SUPABASE_SERVICE_ROLE_KEY`, and `RESEND_API_KEY` set — copy
+  `.env.example` to `.env.local` and fill them in, then restart the dev
+  server (env vars are only read at startup).
+- **Legacy PHP backend**: `backend-php/contact.php`,
+  `create_table.sql`, and `.github/workflows/deploy.yml` are unused —
+  they assumed classic FTP + PHP/MySQL hosting, but this site actually
+  runs on Hostinger's Next.js/Node.js hosting (confirmed via its
+  response headers), which can't execute PHP dropped alongside it.
+  Superseded by the Supabase/Resend API route above; safe to delete
+  once you've confirmed the new form works.
 - **Nova canvas animation**: ported 1:1 into `NovaCanvas.tsx` as a
   client component with a `useEffect`/`requestAnimationFrame` loop,
   cleaned up on unmount. Respects `prefers-reduced-motion`.
@@ -66,6 +75,9 @@ Then open http://localhost:3000.
   `components/ContactForm.tsx`.
 - Add a real `favicon.ico` / `app/icon.png` under `app/` (Next.js picks
   these up automatically).
-- `backend-php/contact.php` still has placeholder DB credentials and a
-  placeholder `Access-Control-Allow-Origin` — fill those in with your
-  real EasyHost database details and domain before deploying.
+- The Resend `from` address (`onboarding@resend.dev` in the API route)
+  only works reliably once you verify a sending domain in Resend — until
+  then, Resend restricts sending to the email address on your own
+  account. Verify `corenovait.com.au` (or a subdomain) in the Resend
+  dashboard and update the `from` address in
+  `app/api/contact/route.ts` once it's done.

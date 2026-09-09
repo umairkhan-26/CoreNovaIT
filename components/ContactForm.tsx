@@ -18,10 +18,8 @@ const SERVICES = [
 type Status = "idle" | "submitting" | "success" | "error";
 
 /**
- * Posts to /api/contact.php (backend-php/contact.php), which stores
- * submissions in MySQL. That endpoint's contract is {name, email, message},
- * so the company/service/details fields below are folded into a single
- * formatted `message` string before sending.
+ * Posts to /api/contact (app/api/contact/route.ts), which saves the
+ * submission to Supabase and emails a notification via Resend.
  */
 export default function ContactForm() {
   const [name, setName] = useState("");
@@ -31,16 +29,6 @@ export default function ContactForm() {
   const [details, setDetails] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [feedback, setFeedback] = useState("");
-
-  function buildMessage() {
-    return [
-      `Agency/Company: ${company || "—"}`,
-      `Service needed: ${service}`,
-      "",
-      "Project details:",
-      details,
-    ].join("\n");
-  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -53,10 +41,10 @@ export default function ContactForm() {
     setFeedback("");
 
     try {
-      const res = await fetch("/api/contact.php", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message: buildMessage() }),
+        body: JSON.stringify({ name, company, email, service, details }),
       });
 
       const data = await res.json().catch(() => null);
