@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NovaCanvas from "@/components/NovaCanvas";
+import Testimonials from "@/components/Testimonials";
 
 const SERVICES = [
   { num: "01", name: "Web Development", blurb: "Shopify, Wix, Squarespace, WordPress, WooCommerce, or fully custom." },
@@ -51,6 +52,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       <section className="teaser">
         <div className="wrap teaser-head">

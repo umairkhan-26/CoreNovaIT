@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
   { href: "/services", label: "Services" },
@@ -57,7 +58,8 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <Link className="btn btn-solid" href="/contact">
+          <ThemeToggle />
+          <Link className="btn nav-cta" href="/contact">
             Start a Project
           </Link>
         </div>
