@@ -7,7 +7,7 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // ---- Database credentials ----
-// TODO: fill these in with the values from your EasyHost "Databases" section
+// TODO: fill these in with the values from your Hostinger hPanel "Databases" section
 $host = 'localhost';
 $db   = 'YOUR_DATABASE_NAME';
 $user = 'YOUR_DATABASE_USER';

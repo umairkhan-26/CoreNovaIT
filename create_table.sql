@@ -1,4 +1,4 @@
--- Run this once in phpMyAdmin (under Databases in your EasyHost panel)
+-- Run this once in phpMyAdmin (under Databases in your Hostinger hPanel)
 -- to create the table that will store contact form submissions.
 
 CREATE TABLE contact_submissions (

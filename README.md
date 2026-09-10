@@ -57,13 +57,15 @@ Then open http://localhost:3000.
   `SUPABASE_SERVICE_ROLE_KEY`, and `RESEND_API_KEY` set — copy
   `.env.example` to `.env.local` and fill them in, then restart the dev
   server (env vars are only read at startup).
-- **Legacy PHP backend**: `backend-php/contact.php`,
-  `create_table.sql`, and `.github/workflows/deploy.yml` are unused —
-  they assumed classic FTP + PHP/MySQL hosting, but this site actually
-  runs on Hostinger's Next.js/Node.js hosting (confirmed via its
-  response headers), which can't execute PHP dropped alongside it.
-  Superseded by the Supabase/Resend API route above; safe to delete
-  once you've confirmed the new form works.
+- **Legacy PHP backend**: `backend-php/contact.php` and
+  `create_table.sql` are unused — they assumed classic FTP +
+  PHP/MySQL hosting, but this site actually runs on Hostinger's
+  Next.js/Node.js hosting (confirmed via its response headers), which
+  can't execute PHP dropped alongside it. Superseded by the
+  Supabase/Resend API route above; safe to delete once you've
+  confirmed the new form works. (The FTP-deploy GitHub Action that
+  used to accompany them has already been removed — Hostinger builds
+  and runs this app directly from the repo.)
 - **Nova canvas animation**: ported 1:1 into `NovaCanvas.tsx` as a
   client component with a `useEffect`/`requestAnimationFrame` loop,
   cleaned up on unmount. Respects `prefers-reduced-motion`.
