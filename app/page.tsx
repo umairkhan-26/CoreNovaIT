@@ -62,14 +62,16 @@ export default function HomePage() {
             View all services →
           </Link>
         </div>
-        <div className="row-scroll wrap" style={{ paddingLeft: 0, paddingRight: 0 }}>
-          {SERVICES.map((s) => (
-            <article className="svc-card" key={s.num}>
-              <div className="svc-num">{s.num}</div>
-              <h3>{s.name}</h3>
-              <p>{s.blurb}</p>
-            </article>
-          ))}
+        <div className="wrap">
+          <div className="row-scroll">
+            {SERVICES.map((s) => (
+              <article className="svc-card" key={s.num}>
+                <div className="svc-num">{s.num}</div>
+                <h3>{s.name}</h3>
+                <p>{s.blurb}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -105,14 +107,16 @@ export default function HomePage() {
             View all platforms →
           </Link>
         </div>
-        <div className="row-scroll wrap" style={{ paddingLeft: 0, paddingRight: 0 }}>
-          {PLATFORMS.map((p) => (
-            <article className="plat-card" key={p.name}>
-              <span className="plat-tag">{p.tag}</span>
-              <h3>{p.name}</h3>
-              <p>{p.blurb}</p>
-            </article>
-          ))}
+        <div className="wrap">
+          <div className="row-scroll">
+            {PLATFORMS.map((p) => (
+              <article className="plat-card" key={p.name}>
+                <span className="plat-tag">{p.tag}</span>
+                <h3>{p.name}</h3>
+                <p>{p.blurb}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

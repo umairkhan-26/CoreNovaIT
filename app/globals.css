@@ -375,6 +375,7 @@ header {
 
 /* ---------- marquee ---------- */
 .marquee {
+  margin-top: 14px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   background: var(--void-2);

@@ -105,30 +105,32 @@ export default function Testimonials() {
         </div>
       </div>
 
-      <div className="row-scroll testimonials-row" ref={rowRef}>
-        {TESTIMONIALS.map((t, i) => (
-          <div
-            className="testimonial-card"
-            key={t.name}
-            ref={(el) => {
-              cardRefs.current[i] = el;
-            }}
-          >
-            <div className="testimonial-media">
-              <img src={t.image} alt="" loading="lazy" />
-              <button
-                type="button"
-                className="testimonial-play"
-                aria-label={`Play testimonial from ${t.name}`}
-              >
-                <PlayIcon />
-              </button>
+      <div className="wrap">
+        <div className="row-scroll testimonials-row" ref={rowRef}>
+          {TESTIMONIALS.map((t, i) => (
+            <div
+              className="testimonial-card"
+              key={t.name}
+              ref={(el) => {
+                cardRefs.current[i] = el;
+              }}
+            >
+              <div className="testimonial-media">
+                <img src={t.image} alt="" loading="lazy" />
+                <button
+                  type="button"
+                  className="testimonial-play"
+                  aria-label={`Play testimonial from ${t.name}`}
+                >
+                  <PlayIcon />
+                </button>
+              </div>
+              <p className="testimonial-caption">
+                <strong>{t.name}</strong> — {t.role}
+              </p>
             </div>
-            <p className="testimonial-caption">
-              <strong>{t.name}</strong> — {t.role}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="wrap">
