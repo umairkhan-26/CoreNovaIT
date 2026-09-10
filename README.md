@@ -73,8 +73,9 @@ Then open http://localhost:3000.
 - Contact email is `contact@corenovait.com.au`, set as `CONTACT_EMAIL` /
   `TO` constants in `components/Footer.tsx` and
   `components/ContactForm.tsx`.
-- Add a real `favicon.ico` / `app/icon.png` under `app/` (Next.js picks
-  these up automatically).
+- `app/icon.svg` is the nova-mark favicon (Next.js serves it
+  automatically, no code needed). Replace it with a real brand
+  favicon whenever one exists.
 - The Resend `from` address (`onboarding@resend.dev` in the API route)
   only works reliably once you verify a sending domain in Resend — until
   then, Resend restricts sending to the email address on your own
